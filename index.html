@@ -41,6 +41,8 @@
 </head>
 <body>
 
+<canvas id="audioVisualizer"></canvas>
+
 <div class="logo">
     <img src="https://zeno.fm/_next/image/?url=https%3A%2F%2Fimages.zeno.fm%2FJArd3NmY3yS0yd65divZh0KphRB6h0bihZTK9SAU-u4%2Frs%3Afit%3A240%3A240%2Fg%3Ace%3A0%3A0%2FaHR0cHM6Ly9zdHJlYW0tdG9vbHMuemVub21lZGlhLmNvbS9jb250ZW50L3N0YXRpb25zL2FneHpmbnBsYm04dGMzUmhkSE55TWdzU0NrRjFkR2hEYkdsbGJuUVlnSURRM19ybHJBZ01DeElPVTNSaGRHbHZibEJ5YjJacGJHVVlnSURRaC1TQmdna01vZ0VFZW1WdWJ3L2ltYWdlLz91cGRhdGVkPTE2NjE2NTQzMTgwMDA.webp&w=3840&q=100" alt="Radio Station Logo">
 </div>
@@ -57,6 +59,51 @@
     <a href="#about" class="link">About</a>
     <a href="#contact" class="link">Contact</a>
 </div>
+
+<script>
+window.addEventListener('load', () => {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const canvas = document.getElementById('audioVisualizer');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const audioElement = document.querySelector('audio');
+    const source = audioContext.createMediaElementSource(audioElement);
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    analyser.fftSize = 256;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    function draw() {
+        requestAnimationFrame(draw);
+
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2.5;
+        let barHeight;
+        let x = 0;
+
+        for(let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+
+            ctx.fillStyle = 'rgb(' + (barHeight+100) + ',50,50)';
+            ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+
+            x += barWidth + 1;
+        }
+    }
+
+    draw();
+});
+</script>
+
 
 </body>
 </html>
