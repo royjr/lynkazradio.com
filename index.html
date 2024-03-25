@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radio Station</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: url('audio-visualizer-background.jpg') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            margin-top: 20vh;
+        }
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .links {
+            margin-bottom: 20px;
+        }
+        .link {
+            margin: 0 10px;
+            color: #fff;
+            text-decoration: none;
+        }
+        audio {
+            width: 300px; /* Adjust as needed */
+        }
+    </style>
+</head>
+<body>
+
+<div class="logo">
+    <img src="logo.png" alt="Radio Station Logo">
+</div>
+
+<div class="audio-controls">
+    <audio controls>
+        <source src="stream-url.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</div>
+
+<div class="links">
+    <a href="#requests" class="link">Requests</a>
+    <a href="#about" class="link">About</a>
+    <a href="#contact" class="link">Contact</a>
+</div>
+
+</body>
+</html>
