@@ -3,60 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Radio Station</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: url('audio-visualizer-background.jpg') center/cover no-repeat;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
+    <title>Modern Radio Station</title>
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: url('https://source.unsplash.com/featured/?concert,lights') center/cover no-repeat;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        color: #E0E0E0;
+        font-family: 'Arial', sans-serif;
+        background-color: #121212;
+    }
+    .logo img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 15px; /* Rounded edges */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        margin-top: 20vh;
+        animation: fadeInDown 2s ease-out;
+    }
+    .audio-controls button, .audio-controls input[type=range] {
+        cursor: pointer;
+        padding: 10px;
+        margin-top: 10px; /* Spacing */
+    }
+    .audio-controls button {
+        background-color: #4CAF50; /* Green */
+        color: white;
+        border: none;
+        border-radius: 5px;
+    }
+    .audio-controls input[type=range] {
+        width: 100px;
+    }
+    .links {
+        margin-bottom: 20px;
+        display: flex;
+        animation: fadeInUp 2s ease-out;
+    }
+    .link {
+        margin: 0 20px;
+        color: #E0E0E0;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: color 0.3s ease;
+    }
+    .link:hover {
+        color: #BDBDBD;
+    }
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
         }
-        .logo {
-            margin-top: 20vh;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .audio-controls {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+    }
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
         }
-        .links {
-            margin-bottom: 20px;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        .link {
-            margin: 0 10px;
-            color: #000;
-            text-decoration: none;
-        }
-        audio {
-            width: 300px; /* Adjust as needed */
-        }
-    </style>
+    }
+</style>
+
 </head>
 <body>
 
 <div class="logo">
-    <img src="https://zeno.fm/_next/image/?url=https%3A%2F%2Fimages.zeno.fm%2FJArd3NmY3yS0yd65divZh0KphRB6h0bihZTK9SAU-u4%2Frs%3Afit%3A240%3A240%2Fg%3Ace%3A0%3A0%2FaHR0cHM6Ly9zdHJlYW0tdG9vbHMuemVub21lZGlhLmNvbS9jb250ZW50L3N0YXRpb25zL2FneHpmbnBsYm04dGMzUmhkSE55TWdzU0NrRjFkR2hEYkdsbGJuUVlnSURRM19ybHJBZ01DeElPVTNSaGRHbHZibEJ5YjJacGJHVVlnSURRaC1TQmdna01vZ0VFZW1WdWJ3L2ltYWdlLz91cGRhdGVkPTE2NjE2NTQzMTgwMDA.webp&w=3840&q=100" alt="Radio Station Logo">
+    <img src="https://zeno.fm/_next/image/?url=https%3A%2F%2Fimages.zeno.fm%2FJArd3NmY3yS0yd65divZh0KphRB6h0bihZTK9SAU-u4%2Frs%3Afit%3A240%3A240%2Fg%3Ace%3A0%3A0%2FaHR0cHM6Ly9zdHJlYW0tdG9vbHMuemVub21lZGlhLmNvbS9jb250ZW50L3N0YXRpb25zL2FneHpmbnBsYm04dGMzUmhkSE55TWdzU0NrRjFkR2hEYkdsbGJuUVlnSURRM19ybHJBZ01DeElPVTNSaGRHbHZibEJ5YjJacGJHVVlnSURRaC1TQmdna01vZ0VFZW1WdWJ3L2ltYWdlLz91cGRhdGVkPTE2NjE2NTQzMTgwMDA.webp&w=3840&q=100" alt="Radio Station Logo" style="max-width: 100%; height: auto;">
 </div>
 
 <div class="audio-controls">
-    <audio controls>
+    <audio id="radioStream" preload="none">
         <source src="https://stream-152.zeno.fm/6nqq2vtwpp8uv" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
+    <button id="playPauseBtn">Play</button>
+    <input type="range" id="volumeControl" min="0" max="1" step="0.01" value="1">
 </div>
+
 
 <div class="links">
     <a href="#requests" class="link">Requests</a>
     <a href="#about" class="link">About</a>
     <a href="#contact" class="link">Contact</a>
 </div>
+
+<script>
+    const audio = document.getElementById('radioStream');
+    const playPauseBtn = document.getElementById('playPauseBtn');
+    const volumeControl = document.getElementById('volumeControl');
+
+    // Toggle play/pause
+    playPauseBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            playPauseBtn.textContent = 'Pause';
+        } else {
+            audio.pause();
+            playPauseBtn.textContent = 'Play';
+        }
+    });
+
+    // Adjust volume
+    volumeControl.addEventListener('input', () => {
+        audio.volume = volumeControl.value;
+    });
+</script>
+
 
 </body>
 </html>
